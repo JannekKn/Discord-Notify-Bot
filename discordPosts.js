@@ -9,12 +9,21 @@ module.exports = {
 async function postTwitch(client, matchingUser, streamer) {
     const streamLink = "https://www.twitch.tv/" + matchingUser.user_login
 
+    title = matchingUser.title
+    if(title == "") {
+        title = " --- ";
+    }
+    game_name = matchingUser.game_name
+    if(game_name == "") {
+        game_name = " --- ";
+    }
+
     const embed = new EmbedBuilder()
         .setColor('#6441a5')
         .setTitle(`${matchingUser.user_name} is online!`)
-        .setDescription(`**${matchingUser.title}**`)
+        .setDescription(`**${title}**`)
         .addFields(
-            { name: 'Game', value: matchingUser.game_name, inline: true },
+            { name: 'Game', value: game_name, inline: true },
             { name: 'Link', value: streamLink, inline: true }
         )
         .setURL(streamLink)
