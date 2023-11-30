@@ -1,6 +1,6 @@
-require('console-stamp')(console, { 
-    format: ':date(dd.mm.yy HH:MM:ss) :label' 
-} );
+require('console-stamp')(console, {
+    format: ':date(dd.mm.yy HH:MM:ss) :label'
+});
 const axios = require('axios');
 const db = require('./database.js');
 const post = require('./discordPosts.js');
@@ -66,16 +66,21 @@ async function checkTwitchStatus() {
 
     //Twitch requests with 100 ids each, puts all responses back in one list
     var allResponses = [];
-    for (const oneList of idLists) {
-        var response = await axios.get(`https://api.twitch.tv/helix/streams?${oneList}`, {
-            headers: {
-                'Client-ID': process.env.TWITCH_CLIENT_ID,
-                'Authorization': `Bearer ${twitchAccessToken}`,
-            },
-        });
 
-        if (response.data.data.length > 0) {
-            allResponses = allResponses.concat(response.data.data);
+    for (const oneList of idLists) {
+        try {
+            var response = await axios.get(`https://api.twitch.tv/helix/streams?${oneList}`, {
+                headers: {
+                    'Client-ID': process.env.TWITCH_CLIENT_ID,
+                    'Authorization': `Bearer ${twitchAccessToken}`,
+                },
+            });
+
+            if (response.data.data.length > 0) {
+                allResponses = allResponses.concat(response.data.data);
+            }
+        } catch (error) {
+            console.error('An ERROR while requesting Twitch data:', error);
         }
     }
 
@@ -112,7 +117,7 @@ async function getTwitchUser(username) {
             return null;
         }
     } catch (error) {
-        console.error('error getting user-ID:', error);
+        console.error('error getting user-ID from twitch:', error);
         return null;
     }
 }
