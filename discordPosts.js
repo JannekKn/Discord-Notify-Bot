@@ -18,6 +18,10 @@ async function postTwitch(client, matchingUser, streamer) {
         game_name = " --- ";
     }
 
+    //Did this, so there is a different link every time, otherwise i think discord caches it weirdly and shows the same picture 
+    let picurl = matchingUser.thumbnail_url.replace("{width}", "384").replace("{height}", "216");
+    picurl += new Date().toISOString();
+
     const embed = new EmbedBuilder()
         .setColor('#6441a5')
         .setTitle(`${matchingUser.user_name} is online!`)
@@ -27,8 +31,8 @@ async function postTwitch(client, matchingUser, streamer) {
             { name: 'Link', value: streamLink, inline: true }
         )
         .setURL(streamLink)
-        .setImage(matchingUser.thumbnail_url.replace("{width}", "384").replace("{height}", "216"))
-        .setFooter({ text: 'Alert bot by Jannek', iconURL: 'https://i.imgur.com/AfFp7pu.png' })
+        .setImage(picurl)
+        .setFooter({ text: 'Alert bot by Jannek', iconURL: 'https://desertbushgames.de/DesertBushGamesLogo.png' })
         .setTimestamp();
 
     try {
